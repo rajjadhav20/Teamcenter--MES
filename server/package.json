@@ -1,0 +1,31 @@
+{
+  "name": "teamcenter-mes-pipeline-server",
+  "version": "1.0.0",
+  "description": "Data ingestion pipeline & monitoring API — Teamcenter PLM to MES, with real-time status over Socket.io",
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "seed": "node seed/sampleData.js"
+  },
+  "dependencies": {
+    "chokidar": "^4.0.1",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^5.1.0",
+    "mongoose": "^8.9.0",
+    "morgan": "^1.10.0",
+    "multer": "^2.1.1",
+    "socket.io": "^4.8.1",
+    "xlsx": "^0.18.5",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

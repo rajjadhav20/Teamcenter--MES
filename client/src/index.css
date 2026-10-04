@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/*
+ * Design direction: this is a factory-floor andon board, not a SaaS
+ * metrics dashboard. Dark control-room base, sharp edges, monospace for
+ * every number/id/timestamp (the way HMI/SCADA readouts actually render
+ * data), and exactly four signal colors reserved for run status —
+ * PENDING/PROCESSING/SUCCESS/FAILED — because that's what an andon board
+ * is: a multi-state signal system, not a single-accent brand palette.
+ */
+@theme {
+  /* Control-room base surfaces, darkest to lightest */
+  --color-base-950: #0a0d11;
+  --color-base-900: #10141a;
+  --color-base-850: #141a21;
+  --color-base-800: #1a2129;
+  --color-base-700: #242c37;
+  --color-base-600: #323c4a;
+  --color-base-400: #6b7684;
+  --color-base-200: #b7c0cb;
+  --color-base-100: #e6e9ed;
+
+  /* Andon signal colors — reserved for run/record status only */
+  --color-andon-pending: #4c8dff;
+  --color-andon-processing: #f5a623;
+  --color-andon-success: #3dbe5c;
+  --color-andon-failed: #e5484d;
+
+  --font-mono-industrial: ui-monospace, "JetBrains Mono", "SF Mono", "Roboto Mono", Menlo, Consolas, monospace;
+  --font-sans-industrial: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --radius-panel: 0.375rem;
+  --radius-badge: 0.1875rem;
+
+  --animate-andon-pulse: andon-pulse 1.8s ease-in-out infinite;
+  --animate-andon-sweep: andon-sweep 1.6s linear infinite;
+}
+
+@keyframes andon-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes andon-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--color-base-950);
+    color: var(--color-base-100);
+    font-family: var(--font-sans-industrial);
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      linear-gradient(var(--color-base-900) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-base-900) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: var(--color-andon-processing);
+    color: var(--color-base-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-andon-processing);
+    outline-offset: 2px;
+  }
+
+  /* Thin, dark scrollbars fit the control-panel feel better than the
+     default glossy browser scrollbar. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-base-600) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--color-base-600);
+    border-radius: 999px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* Soft colored glow behind an active/processing indicator lamp — the
+     one place this UI uses a shadow, and it's functional (draws the eye
+     to what's currently running) rather than decorative. */
+  .andon-glow-processing {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-andon-processing) 40%, transparent),
+      0 0 16px 2px color-mix(in srgb, var(--color-andon-processing) 35%, transparent);
+  }
+  .andon-glow-success {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-andon-success) 35%, transparent);
+  }
+  .andon-glow-failed {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-andon-failed) 40%, transparent),
+      0 0 16px 2px color-mix(in srgb, var(--color-andon-failed) 30%, transparent);
+  }
+
+  .panel {
+    background-color: var(--color-base-850);
+    border: 1px solid var(--color-base-700);
+    border-radius: var(--radius-panel);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

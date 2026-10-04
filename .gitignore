@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+server/watched-folder/*
+!server/watched-folder/.gitkeep
